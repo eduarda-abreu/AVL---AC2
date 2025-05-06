@@ -182,16 +182,16 @@ No* balancear(No *raiz){
     short fb = fatorDeBalanceamento(raiz);
     
     //se está pendendo para direita (fator de balanceamento < -1) e o nó a direita também tem um filho a direita ou dois filhos faz rotação a esquerda 
-    if(fb < -1 && fatorDeBalanceamento(raiz->dir) <= 0){
+    if(fb < -1 && fatorDeBalanceamento(raiz->direita) <= 0){
         raiz = rotacaoEsquerda(raiz);
     }//se está pendendo para esquerda (fator de balanceamento > 1) e o nó a esquerda também tem um filho a esquerda ou dois filhos faz rotação a direita
-    else if(fb > 1 && fatorDeBalanceamento(raiz->esq)>= 0){
+    else if(fb > 1 && fatorDeBalanceamento(raiz->esquerda)>= 0){
         raiz =  rotacaoDireita(raiz);
     }
-    else if(fb > 1 && fatorDeBalanceamento(raiz->esq)< 0){
+    else if(fb > 1 && fatorDeBalanceamento(raiz->esquerda)< 0){
         raiz = rotacaoEsquerdaDireita(raiz);
     }
-    else if(fb< -1 && fatorDeBalanceamento(raiz->dir)>0){
+    else if(fb< -1 && fatorDeBalanceamento(raiz->direita)>0){
         raiz = rotacaoDireitaEsquerda(raiz);
     }
 }
