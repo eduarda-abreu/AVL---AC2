@@ -136,14 +136,46 @@ short alturaDoNo(No* no){
     }
 }
 
-short fatorDeBalanceamento(No *no);
+short fatorDeBalanceamento(No *no){
+    if(no){
+        return (alturaDoNo(no->esquerda) - alturaDoNo(no->direita)); // se o resultado for -2 ou 2 está desbalanceada a árvore 
+    }else{
+        return 0;
+    }
+}
 
-No* rotacaoEsquerda(No *r);
+No* rotacaoEsquerda(No *r){
+    No *y, *f; //y nó que se tornará raiz e f é o filho desse nó que não pode ser perdido
 
-No* rotacaoDireita(No *r);
+    y = r->direita; // raiz ficará a esquerda pois é menor do que o nó 
+    f = y->esquerda; //filho (esquerda) do nó que será a raiz sendo armazenado para não perde-lo ao fazer a rotação, pois o nó raiz atual que se tornará filho em seu lugar para balancear a raiz e o no armazenado em f ficará a direita do nó que se tornará filho
 
-No* rotacaoDireitaEsquerda(No *r);
+    r->altura = maior(alturaDoNo(r->esquerda), alturaDoNo(r->direita)) +1;
+    y->altura = maior(alturaDoNo(r->esquerda), alturaDoNo(r->direita)) +1;
+   
+    return y; //retorna a nova raiz
+}
 
-No* rotacaoEsquerdaDireita(No *r);
+No* rotacaoDireita(No *r){
+    No *y, *f;
+
+    y= r->esquerda;
+    f = y->direita;
+    
+    r->altura = maior(alturaDoNo(r->esquerda), alturaDoNo(r->direita)) +1;
+    y->altura = maior(alturaDoNo(r->esquerda), alturaDoNo(r->direita)) +1;
+   
+    return y; //retorna a nova raiz
+}
+
+No* rotacaoDireitaEsquerda(No *r){
+    r->direita =  rotacaoDireita(r->direita);
+    return rotacaoEsquerda(r);
+}
+
+No* rotacaoEsquerdaDireita(No *r){
+    r->esq = rotacaoEsquerda(r->esq);
+    return rotacaoDireita(r);
+}
 
 No* balancear(No *raiz);
