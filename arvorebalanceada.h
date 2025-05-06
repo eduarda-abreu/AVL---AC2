@@ -63,3 +63,5 @@ No* rotacaoDireitaEsquerda(No *r);
 No* rotacaoEsquerdaDireita(No *r);
 
 No* balancear(No *raiz);
+
+Prontuario lerProntuarioDoUsuario();
