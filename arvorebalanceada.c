@@ -213,10 +213,13 @@ short maior(short a, short b){
     return (a>b)? a:b; // se a for maior que b eu retorno a, se não retorna b 
 }
 
+//Função que retorna a altura de um nó na árvore 
 short alturaDoNo(No* no){
     if(no== NULL){
+        // se o nó for nulo (arvore vazia ou filho inexistente), a altura é -1
         return -1;
     }else{ 
+        //caso contrário, retorna a altura armazenada no nó
         return no->altura;
     }
 }
