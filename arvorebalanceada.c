@@ -174,8 +174,24 @@ No* rotacaoDireitaEsquerda(No *r){
 }
 
 No* rotacaoEsquerdaDireita(No *r){
-    r->esq = rotacaoEsquerda(r->esq);
+    r->esquerda = rotacaoEsquerda(r->esquerda);
     return rotacaoDireita(r);
 }
 
-No* balancear(No *raiz);
+No* balancear(No *raiz){
+    short fb = fatorDeBalanceamento(raiz);
+    
+    //se está pendendo para direita (fator de balanceamento < -1) e o nó a direita também tem um filho a direita ou dois filhos faz rotação a esquerda 
+    if(fb < -1 && fatorDeBalanceamento(raiz->dir) <= 0){
+        raiz = rotacaoEsquerda(raiz);
+    }//se está pendendo para esquerda (fator de balanceamento > 1) e o nó a esquerda também tem um filho a esquerda ou dois filhos faz rotação a direita
+    else if(fb > 1 && fatorDeBalanceamento(raiz->esq)>= 0){
+        raiz =  rotacaoDireita(raiz);
+    }
+    else if(fb > 1 && fatorDeBalanceamento(raiz->esq)< 0){
+        raiz = rotacaoEsquerdaDireita(raiz);
+    }
+    else if(fb< -1 && fatorDeBalanceamento(raiz->dir)>0){
+        raiz = rotacaoDireitaEsquerda(raiz);
+    }
+}
