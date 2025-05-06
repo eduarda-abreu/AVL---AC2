@@ -232,9 +232,13 @@ short fatorDeBalanceamento(No *no){
 No* rotacaoEsquerda(No *r){
     No *y, *f; //y nó que se tornará raiz e f é o filho desse nó que não pode ser perdido
 
-    y = r->direita; // raiz ficará a esquerda pois é menor do que o nó 
-    f = y->esquerda; //filho (esquerda) do nó que será a raiz sendo armazenado para não perde-lo ao fazer a rotação, pois o nó raiz atual que se tornará filho em seu lugar para balancear a raiz e o no armazenado em f ficará a direita do nó que se tornará filho
+    y = r->direita; // y é o filho à direita de r e se tornará a nova raiz da subárvore
+    f = y->esquerda; //f é o filho esquerdo de y, que será realocado como filho direito de r
 
+    y->esquerda = r; // r se torna filho esquerdo de y
+    r->direita = f; // f se torna o filho direito de r
+
+    //Atualizando alturas após a rotação
     r->altura = maior(alturaDoNo(r->esquerda), alturaDoNo(r->direita)) +1;
     y->altura = maior(alturaDoNo(r->esquerda), alturaDoNo(r->direita)) +1;
    
@@ -242,22 +246,28 @@ No* rotacaoEsquerda(No *r){
 }
 
 No* rotacaoDireita(No *r){
-    No *y, *f;
+    No *y, *f;//y nó que se tornará raiz e f é o filho desse nó que não pode ser perdido
 
-    y= r->esquerda;
-    f = y->direita;
+    y= r->esquerda; //y é filho à esquerda de r e se tornará a nova raiz da subárvore
+    f = y->direita;//f é o filho à direita de y, que será realocado como filho esquerdo de r
+
+    y->direita =r;//r se torna filho direito de y
+    r->esquerda = f;// f se torna o filho esquerdo de r
     
+    //atualiza as alturas após a rotação
     r->altura = maior(alturaDoNo(r->esquerda), alturaDoNo(r->direita)) +1;
     y->altura = maior(alturaDoNo(r->esquerda), alturaDoNo(r->direita)) +1;
    
     return y; //retorna a nova raiz
 }
 
+/*Rotação dupla a esquerda -> é necessário fazer primeiro uma rotação à direita no filho a direita e depois uma rotação à esquerda no nó atual */
 No* rotacaoDireitaEsquerda(No *r){
     r->direita =  rotacaoDireita(r->direita);
     return rotacaoEsquerda(r);
 }
 
+/*Rotação dupla à direita -> é necessário fazer primeiro uma rotação a esquerda no filho à esquerda e depois uma rotação à direita no nó atual*/
 No* rotacaoEsquerdaDireita(No *r){
     r->esquerda = rotacaoEsquerda(r->esquerda);
     return rotacaoDireita(r);
@@ -272,7 +282,7 @@ No* balancear(No *raiz){
     }//se está pendendo para esquerda (fator de balanceamento > 1) e o nó a esquerda também tem um filho a esquerda ou dois filhos faz rotação a direita
     else if(fb > 1 && fatorDeBalanceamento(raiz->esquerda)>= 0){
         raiz =  rotacaoDireita(raiz);
-    }
+    }/*Caso de rotação dupla a direita: se o filho está pendendo pra esquerda fb > 1, mas o filho à esquerda está pendendo para a direita fator de balanceamento < 0 é necessário fazer a rotação esquerda direita*/
     else if(fb > 1 && fatorDeBalanceamento(raiz->esquerda)< 0){
         raiz = rotacaoEsquerdaDireita(raiz);
     }
