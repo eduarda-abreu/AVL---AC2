@@ -300,5 +300,5 @@ Prontuario lerProntuarioDoUsuario() {
     fgets(p.historico, sizeof(p.historico), stdin);
     p.historico[strcspn(p.historico, "\n")] = 0;
 
-    return p;
+    return p;
 }
