@@ -20,7 +20,8 @@ typedef struct
 typedef struct No
 {
     Prontuario dados;
-    struct no *esquerda, *direita; 
+    struct no *esquerda, *direita;
+    short altura;
 }No;
 
 typedef struct{
