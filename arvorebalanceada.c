@@ -105,23 +105,108 @@ No* novoNo(Prontuario p){
 }
 
 bool atualizar(No *raiz, const char cpf, const char *novoNome, const char *novoHistorico){
+    if(raiz == NULL){
+        return false; //não encontrou cpf ou não há raiz
+    }else{
+        if(strcmp(cpf, raiz->dados.cpf)==0){ 
+            strcpy(raiz->dados.nome, novoNome); //copia o novo nome na variavel da raiz, alterando o nome
+            strcpy(raiz->dados.historico, novoHistorico);//copia o novo histórico na variavel da raiz, alterando o histórico
+            return true;
+        }else{
+              if (strcmp(cpf, raiz->dados.cpf) < 0){ //atualiza na subarvore a esquerda
+                return atualizar(raiz->esquerda, cpf, novoNome, novoHistorico );
+            }else if (strcmp(cpf, raiz->dados.cpf) > 0){ //atualiza na subarvore a direita
+                return atualizar(raiz->direita, cpf, novoNome, novoHistorico );
+            }
+        }
+    }
 
 }
 
 void imprimeTodosInOrder(No *raiz){
-
+    //imprime a arvore em ordem ou seja, Esquerda -> Raiz-> Direita
+    if(raiz != NULL){
+        imprimeTodos(raiz->esquerda);
+        printf("\n------Prontário------\n");        
+        printf("Nome: %s\n", raiz->dados.nome);
+        printf("Cpf: %s\n", raiz->dados.cpf);
+        printf("Data de Nascimento %02d/%02d/%04d\n", raiz->dados.dataNasc.data,raiz->dados.dataNasc.mes, raiz->dados.dataNasc. ano );
+        printf("Histórico: %s\n", raiz->dados.historico);
+        printf("-----------------------\n");
+        imprimeTodos(raiz->direita);    
+    } 
 }
 
 void imprimeEspecifico(No *raiz, Prontuario p){
-
+    //imprime um prontuario especifico a partir do cpf
+    if (raiz != NULL){   
+        if(strcmp(p.cpf, raiz->dados.cpf)==0){
+            printf("\n------Prontário------\n");        
+            printf("Nome: %s\n", raiz->dados.nome);
+            printf("Cpf: %s\n", raiz->dados.cpf);
+            printf("Data de Nascimento %02d/%02d/%04d\n", raiz->dados.dataNasc.data,raiz->dados.dataNasc.mes, raiz->dados.dataNasc. ano );
+            printf("Histórico: %s\n", raiz->dados.historico);
+            printf("-----------------------\n");
+        }else{
+            if (strcmp(p.cpf, raiz->dados.cpf) < 0){ 
+                imprimeEspecifico(raiz->esquerda, p);
+            }else if (strcmp(p.cpf, raiz->dados.cpf) > 0){ 
+                imprimeEspecifico(raiz->direita, p);
+            }
+        }
+    }  
 }
 
 bool data_valida(int dia, int mes, int ano){
-
+    if (ano < 1900 || ano > 2025) return false; // Anos válidos, para limitar se a data é valida, não há pessoas nascidas depois de 2025
+    if (mes < 1 || mes > 12) return false; //como os meses vão de 1 a 12, se for maior que 12 ou menor que 1 é classificada inválida 
+    
+    // Verifica se os dias correspondem com os dias contidos nos meses, já que nem todos tem a mesma quantidade de dias
+    int dias_mes[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+    
+    // verificação para ano bissexto, ja que é o mes 2 e todo ano bissexto é divisivel por 
+    if (mes == 2 && ((ano % 400 == 0) || (ano % 100 != 0 && ano % 4 == 0))) {
+        dias_mes[1] = 29;
+    }
+    
+    return (dia >= 1 && dia <= dias_mes[mes-1]); //dia só é valido se for entre 1 e o ultimo dia do do seu mês
 }
 
 bool inserirDataNascimento(Prontuario *prontuario){
+    if (prontuario == NULL) {
+        printf("Erro: Prontuário inexistente");
+        return false;
+    }
 
+    int dia, mes, ano;
+    
+    printf("\n--- Inserção de Data de Nascimento ---\n");
+    
+    // Pede para inserir até dar uma data válida
+    do {
+        printf("Dia (1-31): ");
+        scanf("%d", &dia);
+        
+        printf("Mês (1-12): ");
+        scanf("%d", &mes);
+        
+        printf("Ano (1900-2025): ");
+        scanf("%d", &ano);
+        
+        if (!data_valida(dia, mes, ano)) {
+            printf("Data inválida! Por favor, insira novamente.\n");
+        }
+    } while (!data_valida(dia, mes, ano));
+    
+    // Atribui a data validada ao prontuário
+    prontuario->dataNasc.data = dia;
+    prontuario->dataNasc.mes = mes;
+    prontuario->dataNasc.ano = ano;
+    
+    printf("Data de nascimento inserida com sucesso: %02d/%02d/%04d\n", 
+           dia, mes, ano); //imprime a data
+    
+    return true;
 }
 
 short maior(short a, short b){
