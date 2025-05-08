@@ -1,7 +1,7 @@
 #include "arvorebalanceada.h"
 
 void inicializarArvore(ArvB *arv){
-    arv->raiz == NULL;
+    arv->raiz = NULL;
 }
 
 No* insere(No *raiz, Prontuario p){
@@ -24,27 +24,27 @@ No* insere(No *raiz, Prontuario p){
     }
 }
 
-No* buscar(No *raiz, Prontuario p){
+No* buscar(No *raiz, char* cpf){
     if (raiz == NULL){
         return NULL; //Ou a árvore não existe ou elemento não foi encontrado.
     }else{
-         if(strcmp(p.cpf, raiz->dados.cpf)==0){ //se der 0 são iguais
+         if(strcmp(cpf, raiz->dados.cpf)==0){ //se der 0 são iguais
              return raiz;
          }else{
-             if (strcmp(p.cpf, raiz->dados.cpf) < 0){ //realiza busca na subarvore a esquerda
-                 return buscar(raiz->esquerda, p);
-             }else if (strcmp(p.cpf, raiz->dados.cpf) > 0){ //realiza busca na subarvore a direita
-                 return buscar(raiz->direita, p);
+             if (strcmp(cpf, raiz->dados.cpf) < 0){ //realiza busca na subarvore a esquerda
+                 return buscar(raiz->esquerda, cpf);
+             }else if (strcmp(cpf, raiz->dados.cpf) > 0){ //realiza busca na subarvore a direita
+                 return buscar(raiz->direita, cpf);
              }
          }
     }   
 }
 
-No* remover(No *raiz, Prontuario p){
+No* remover(No *raiz, const char *cpf){
     if (raiz == NULL){
         return NULL; //Ou a árvore não existe ou elemento não foi encontrado para a remoção.
      }else{
-         if(strcmp(p.cpf, raiz->dados.cpf)==0){
+         if(strcmp(cpf, raiz->dados.cpf)==0){
              if(raiz->esquerda == NULL && raiz->direita == NULL){ //remove nós folhas
                  free(raiz); //libera a memória da raiz
                  return NULL;
@@ -62,22 +62,21 @@ No* remover(No *raiz, Prontuario p){
                  }else { //removerá nós com dois filhos
                      /*Ao remover um nó com dois filhos, se usar a subávore a esquerda (que é o caso), substituí pelo maior valor dela, ou seja, o nó mais a direita*/
                      No *aux = raiz->esquerda;
-                     while (aux->direita == NULL){
+                     while (aux->direita != NULL){
                          aux = aux->direita; //percorre a direita até achar o mais à direita 
                      }
  
                      /*Após achar o nó mais a direita troca os valores do nó a ser removido e o que vai substituir para que ele seja um nó folha ou com um filho só, assim faz recursão de função e chamando o remover para o nó , ai cairá em uma das situações acima e removerá o nó*/
                      raiz->dados = aux->dados;
-                     aux->dados = p;
-                     raiz->esquerda = remover(raiz->esquerda, p);
+                     raiz->esquerda = remover(raiz->esquerda, aux->dados.cpf);
                      return raiz;
                  }
              }
         }else{
-             if (strcmp(p.cpf, raiz->dados.cpf) < 0){ //realiza busca na subarvore a esquerda
-                 raiz->esquerda= remover(raiz->esquerda, p);
-            }else if (strcmp(p.cpf, raiz->dados.cpf) > 0){ //realiza busca na subarvore a direita
-                 raiz->direita = remover(raiz->direita, p);
+             if (strcmp(cpf, raiz->dados.cpf) < 0){ //realiza busca na subarvore a esquerda
+                 raiz->esquerda= remover(raiz->esquerda, cpf);
+            }else if (strcmp(cpf, raiz->dados.cpf) > 0){ //realiza busca na subarvore a direita
+                 raiz->direita = remover(raiz->direita, cpf);
             }
 
             //recalcula a altura de todos os nós entre a raiz e o nó removido
@@ -102,9 +101,11 @@ No* novoNo(Prontuario p){
     }else{
         printf("Erro ao alocar nó em novo nó");
     }
+
+    return novo;  
 }
 
-bool atualizar(No *raiz, const char cpf, const char *novoNome, const char *novoHistorico){
+bool atualizar(No *raiz, const char *cpf, const char *novoNome, const char *novoHistorico){
     if(raiz == NULL){
         return false; //não encontrou cpf ou não há raiz
     }else{
@@ -126,14 +127,14 @@ bool atualizar(No *raiz, const char cpf, const char *novoNome, const char *novoH
 void imprimeTodosInOrder(No *raiz){
     //imprime a arvore em ordem ou seja, Esquerda -> Raiz-> Direita
     if(raiz != NULL){
-        imprimeTodos(raiz->esquerda);
+        imprimeTodosInOrder(raiz->esquerda);
         printf("\n------Prontário------\n");        
         printf("Nome: %s\n", raiz->dados.nome);
         printf("Cpf: %s\n", raiz->dados.cpf);
         printf("Data de Nascimento %02d/%02d/%04d\n", raiz->dados.dataNasc.dia,raiz->dados.dataNasc.mes, raiz->dados.dataNasc. ano );
         printf("Histórico: %s\n", raiz->dados.historico);
         printf("-----------------------\n");
-        imprimeTodos(raiz->direita);    
+        imprimeTodosInOrder(raiz->direita);    
     } 
 }
 
@@ -292,6 +293,8 @@ No* balancear(No *raiz){
     else if(fb< -1 && fatorDeBalanceamento(raiz->direita)>0){
         raiz = rotacaoDireitaEsquerda(raiz);
     }
+
+    return raiz;
 }
 
 Prontuario lerProntuarioDoUsuario() {

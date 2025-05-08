@@ -20,7 +20,7 @@ typedef struct
 typedef struct No
 {
     Prontuario dados;
-    struct no *esquerda, *direita;
+    struct No *esquerda, *direita;
     short altura;
 }No;
 
@@ -32,13 +32,13 @@ void inicializarArvore(ArvB *arv);
 
 No* insere(No *raiz, Prontuario p);
 
-No* buscar(No *raiz, Prontuario p);
+No* buscar(No *raiz, char* cpf);
 
-No* remover(No *raiz, Prontuario p);
+No* remover(No *raiz, const char *cpf);
 
 No* novoNo(Prontuario p);
 
-bool atualizar(No *raiz, const char cpf, const char *novoNome, const char *novoHistorico);
+bool atualizar(No *raiz, const char *cpf, const char *novoNome, const char *novoHistorico);
 
 void imprimeTodosInOrder(No *raiz);
 
