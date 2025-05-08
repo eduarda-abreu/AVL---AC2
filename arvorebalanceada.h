@@ -4,7 +4,7 @@
 #include <stdbool.h>
 
 typedef struct {
-    int data, mes, ano;
+    int dia, mes, ano;
 }Data;
 
 
