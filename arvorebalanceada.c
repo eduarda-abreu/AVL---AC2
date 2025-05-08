@@ -130,7 +130,7 @@ void imprimeTodosInOrder(No *raiz){
         printf("\n------Prontário------\n");        
         printf("Nome: %s\n", raiz->dados.nome);
         printf("Cpf: %s\n", raiz->dados.cpf);
-        printf("Data de Nascimento %02d/%02d/%04d\n", raiz->dados.dataNasc.data,raiz->dados.dataNasc.mes, raiz->dados.dataNasc. ano );
+        printf("Data de Nascimento %02d/%02d/%04d\n", raiz->dados.dataNasc.dia,raiz->dados.dataNasc.mes, raiz->dados.dataNasc. ano );
         printf("Histórico: %s\n", raiz->dados.historico);
         printf("-----------------------\n");
         imprimeTodos(raiz->direita);    
@@ -144,7 +144,7 @@ void imprimeEspecifico(No *raiz, Prontuario p){
             printf("\n------Prontário------\n");        
             printf("Nome: %s\n", raiz->dados.nome);
             printf("Cpf: %s\n", raiz->dados.cpf);
-            printf("Data de Nascimento %02d/%02d/%04d\n", raiz->dados.dataNasc.data,raiz->dados.dataNasc.mes, raiz->dados.dataNasc. ano );
+            printf("Data de Nascimento %02d/%02d/%04d\n", raiz->dados.dataNasc.dia,raiz->dados.dataNasc.mes, raiz->dados.dataNasc. ano );
             printf("Histórico: %s\n", raiz->dados.historico);
             printf("-----------------------\n");
         }else{
@@ -199,7 +199,7 @@ bool inserirDataNascimento(Prontuario *prontuario){
     } while (!data_valida(dia, mes, ano));
     
     // Atribui a data validada ao prontuário
-    prontuario->dataNasc.data = dia;
+    prontuario->dataNasc.dia = dia;
     prontuario->dataNasc.mes = mes;
     prontuario->dataNasc.ano = ano;
     
@@ -306,7 +306,7 @@ Prontuario lerProntuarioDoUsuario() {
     p.cpf[strcspn(p.cpf, "\n")] = 0;
 
     printf("Digite a data de nascimento (dd mm aaaa): ");
-    scanf("%d %d %d", &p.dataNasc.data, &p.dataNasc.mes, &p.dataNasc.ano);
+    scanf("%d %d %d", &p.dataNasc.dia, &p.dataNasc.mes, &p.dataNasc.ano);
 
     printf("Digite o histórico médico: ");
     getchar(); // Limpa buffer
